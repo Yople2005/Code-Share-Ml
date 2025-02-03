@@ -64,23 +64,23 @@ export function Auth({ setIsGuest }: AuthProps) {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-100">
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-100 px-4 sm:px-6 lg:px-8">
       <div className="max-w-md w-full space-y-8">
-        <div className="bg-white p-8 rounded-2xl shadow-xl border border-purple-100">
+        <div className="bg-white p-6 sm:p-8 rounded-2xl shadow-xl border border-purple-100">
           <div className="text-center">
             <div className="flex justify-center mb-6">
               <div className="p-3 bg-gradient-to-r from-blue-600 to-purple-600 rounded-2xl shadow-lg transform hover:scale-105 transition-transform">
                 <div className="p-2 bg-white rounded-xl">
-                  <div className="w-16 h-16 flex items-center justify-center text-4xl font-mono bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+                  <div className="w-12 h-12 sm:w-16 sm:h-16 flex items-center justify-center text-3xl sm:text-4xl font-mono bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
                     {`</>`}
                   </div>
                 </div>
               </div>
             </div>
-            <h1 className="text-4xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent mb-2">
+            <h1 className="text-3xl sm:text-4xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent mb-2">
               Code Share ML
             </h1>
-            <h2 className="text-xl font-medium text-gray-700 mb-1">
+            <h2 className="text-lg sm:text-xl font-medium text-gray-700 mb-1">
               Welcome Back
             </h2>
             <p className="text-sm text-gray-500">
@@ -94,47 +94,27 @@ export function Auth({ setIsGuest }: AuthProps) {
                 <label htmlFor="username" className="block text-sm font-medium text-gray-700 mb-1">
                   Username
                 </label>
-                <div className="relative flex items-center group">
-                  <div className="absolute left-0 inset-y-0 flex items-center pl-3 transition-opacity group-focus-within:opacity-0">
-                    <svg className="h-5 w-5 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
-                    </svg>
-                  </div>
-                  <div className="absolute left-12 inset-y-0 flex items-center transition-opacity group-focus-within:opacity-0">
-                    <div className="h-5 w-px bg-gray-200"></div>
-                  </div>
-                  <input
-                    id="username"
-                    type="text"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    className="block w-full pl-16 focus:pl-4 pr-4 py-3 rounded-xl border border-gray-200 shadow-sm focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-all"
-                    required
-                  />
-                </div>
+                <input
+                  id="username"
+                  type="text"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  className="block w-full px-4 py-3 rounded-xl border border-gray-200 shadow-sm focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-all"
+                  required
+                />
               </div>
               <div>
                 <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-1">
                   Password
                 </label>
-                <div className="relative flex items-center group">
-                  <div className="absolute left-0 inset-y-0 flex items-center pl-3 transition-opacity group-focus-within:opacity-0">
-                    <svg className="h-5 w-5 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
-                    </svg>
-                  </div>
-                  <div className="absolute left-12 inset-y-0 flex items-center transition-opacity group-focus-within:opacity-0">
-                    <div className="h-5 w-px bg-gray-200"></div>
-                  </div>
-                  <input
-                    id="password"
-                    type="password"
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                    className="block w-full pl-16 focus:pl-4 pr-4 py-3 rounded-xl border border-gray-200 shadow-sm focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-all"
-                    required
-                  />
-                </div>
+                <input
+                  id="password"
+                  type="password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  className="block w-full px-4 py-3 rounded-xl border border-gray-200 shadow-sm focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-all"
+                  required
+                />
               </div>
             </div>
 

@@ -49,7 +49,7 @@ export function Navigation() {
           <div className="flex items-center">
             <Link 
               to="/" 
-              className="text-xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent hover:opacity-80 transition-opacity"
+              className="text-lg sm:text-xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent hover:opacity-80 transition-opacity"
             >
               Codes Share Ml
             </Link>
@@ -60,7 +60,7 @@ export function Navigation() {
               <div className="relative">
                 <button
                   onClick={toggleProfileMenu}
-                  className="flex items-center space-x-3 p-2 rounded-xl hover:bg-gray-100 transition-colors relative z-10"
+                  className="flex items-center space-x-2 sm:space-x-3 p-2 rounded-xl hover:bg-gray-100 transition-colors relative z-10"
                 >
                   <div className="w-8 h-8 rounded-full bg-gradient-to-r from-indigo-600 to-purple-600 flex items-center justify-center text-white font-medium">
                     {user.email[0].toUpperCase()}
@@ -71,17 +71,17 @@ export function Navigation() {
                     </div>
                     <div className="text-xs">
                       {isAdmin ? (
-                        <span className="text-indigo-600 font-medium">Admin Account</span>
+                        <span className="text-indigo-600 font-medium">Admin</span>
                       ) : (
-                        <span className="text-purple-600 font-medium">User Account</span>
+                        <span className="text-purple-600 font-medium">User</span>
                       )}
                     </div>
                   </div>
                 </button>
 
-                {/* Dropdown menu */}
+                {/* Dropdown menu - make it full width on mobile */}
                 {showProfileMenu && (
-                  <div className="absolute right-0 top-full mt-1 w-48 rounded-xl bg-white shadow-lg border-2 border-gray-100 overflow-hidden z-30">
+                  <div className="absolute right-0 top-full mt-1 w-48 sm:w-56 rounded-xl bg-white shadow-lg border-2 border-gray-100 overflow-hidden z-30">
                     {/* User info - visible on mobile */}
                     <div className="sm:hidden p-4 border-b-2 border-gray-100">
                       <div className="text-sm font-medium text-gray-900">
@@ -89,9 +89,9 @@ export function Navigation() {
                       </div>
                       <div className="text-xs mt-0.5">
                         {isAdmin ? (
-                          <span className="text-indigo-600 font-medium">Admin Account</span>
+                          <span className="text-indigo-600 font-medium">Admin</span>
                         ) : (
-                          <span className="text-purple-600 font-medium">User Account</span>
+                          <span className="text-purple-600 font-medium">User</span>
                         )}
                       </div>
                     </div>
