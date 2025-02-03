@@ -162,8 +162,10 @@ export function FolderTagManager({
         <div className="flex flex-wrap gap-2">
           <button
             onClick={() => onSelectTag(null)}
-            className={`px-3 py-1 rounded-full text-sm ${
-              !selectedTag ? 'bg-blue-500 text-white' : 'bg-gray-200 hover:bg-gray-300'
+            className={`px-3 py-1 rounded-full text-sm transition-all duration-300 ${
+              !selectedTag 
+                ? 'bg-blue-500 text-white shadow-md scale-105' 
+                : 'bg-gray-200 hover:bg-gray-300'
             }`}
           >
             All Tags
@@ -172,9 +174,9 @@ export function FolderTagManager({
             <button
               key={tag.id}
               onClick={() => onSelectTag(tag.name)}
-              className={`px-3 py-1 rounded-full text-sm ${
+              className={`px-3 py-1 rounded-full text-sm transition-all duration-300 ${
                 selectedTag === tag.name
-                  ? 'bg-blue-500 text-white'
+                  ? 'bg-blue-500 text-white shadow-md scale-105'
                   : 'bg-gray-200 hover:bg-gray-300'
               }`}
             >
