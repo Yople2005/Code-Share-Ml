@@ -212,9 +212,9 @@ export default function Home() {
           <div className="text-red-600 text-center">{error}</div>
         ) : (
           <div className="max-w-7xl mx-auto px-4 py-8">
-            <div className="grid grid-cols-12 gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-12 gap-4 md:gap-6">
               {/* Sidebar */}
-              <div className="col-span-12 md:col-span-3">
+              <div className="md:col-span-3">
                 <FolderTagManager
                   onSelectFolder={setSelectedFolder}
                   onSelectTag={setSelectedTag}
@@ -225,9 +225,9 @@ export default function Home() {
               </div>
 
               {/* Main Content */}
-              <div className="col-span-12 md:col-span-9 h-[calc(100vh-8rem)]">
+              <div className="md:col-span-9 h-[calc(100vh-8rem)]">
                 <div className="bg-white shadow rounded-lg h-full flex flex-col">
-                  <div className="p-6 border-b">
+                  <div className="p-4 sm:p-6 border-b">
                     <div className="flex justify-between items-center mb-6">
                       <h1 className="text-2xl font-semibold text-gray-900">
                         Code Snippets
@@ -248,7 +248,19 @@ export default function Home() {
                     </div>
                   </div>
 
-                  <div className="flex-1 overflow-y-auto p-6">
+                  {/* Code Share Modal */}
+                  <Modal
+                    isOpen={showCreateForm}
+                    onClose={() => setShowCreateForm(false)}
+                    title="Share Code"
+                  >
+                    <CodeShareForm onSuccess={() => {
+                      loadSnippets();
+                      setShowCreateForm(false);
+                    }} />
+                  </Modal>
+
+                  <div className="flex-1 overflow-y-auto p-3 sm:p-6">
                     <div className="relative">
                       <div 
                         className={`grid grid-cols-1 sm:grid-cols-2 gap-6 transition-opacity duration-300 ${
@@ -259,28 +271,28 @@ export default function Home() {
                           <div
                             key={snippet.id}
                             onClick={() => handleSnippetClick(snippet)}
-                            className="bg-white rounded-lg border border-gray-200 p-6 hover:shadow-lg transition-shadow cursor-pointer group relative"
+                            className="bg-white rounded-lg border border-gray-200 p-3 hover:shadow-lg transition-shadow cursor-pointer group relative"
                           >
                             <div className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-30 text-white opacity-0 group-hover:opacity-100 transition-opacity rounded-lg">
                               <p className="text-sm font-medium">Click to view full code</p>
                             </div>
                             
                             <div className="flex flex-col h-full">
-                              <div className="mb-4">
-                                <h3 className="text-lg font-medium text-gray-900 truncate">
+                              <div className="mb-2">
+                                <h3 className="text-base sm:text-lg font-medium text-gray-900 truncate">
                                   {snippet.title}
                                 </h3>
                                 {snippet.description && (
-                                  <p className="mt-2 text-sm text-gray-500 line-clamp-2">
+                                  <p className="mt-1 text-xs text-gray-500 line-clamp-2">
                                     {snippet.description}
                                   </p>
                                 )}
                               </div>
 
-                              <div className="space-y-3 mb-4">
+                              <div className="space-y-2 mb-2">
                                 <div className="flex items-center text-sm text-gray-500">
-                                  <Folder className="h-4 w-4 mr-2" />
-                                  <span className="truncate">
+                                  <Folder className="h-3 w-3 mr-1 flex-shrink-0" />
+                                  <span className="truncate text-xs sm:text-sm">
                                     {snippet.folder?.parent?.name && (
                                       <>
                                         <span>{snippet.folder.parent.name}</span>
@@ -291,20 +303,20 @@ export default function Home() {
                                   </span>
                                 </div>
                                 <div className="flex items-center space-x-2">
-                                  <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-indigo-100 text-indigo-800">
+                                  <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-indigo-100 text-indigo-800">
                                     {SUPPORTED_LANGUAGES.find(l => l.value === snippet.language)?.label}
                                   </span>
                                 </div>
                               </div>
 
-                              <div className="relative h-48 overflow-hidden rounded bg-gray-50">
+                              <div className="relative h-32 overflow-hidden rounded bg-gray-50">
                                 <SyntaxHighlighter
                                   language={snippet.language}
                                   style={vscDarkPlus}
                                   customStyle={{
                                     margin: 0,
-                                    padding: '1rem',
-                                    fontSize: '0.875rem',
+                                    padding: '0.5rem',
+                                    fontSize: '0.75rem',
                                     height: '100%',
                                     overflow: 'hidden'
                                   }}
