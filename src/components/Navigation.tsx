@@ -49,9 +49,18 @@ export function Navigation() {
           <div className="flex items-center">
             <Link 
               to="/" 
-              className="text-lg sm:text-xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent hover:opacity-80 transition-opacity"
+              className="flex items-center space-x-2 text-lg sm:text-xl font-bold hover:opacity-80 transition-opacity"
             >
-              Codes Share Ml
+              <div className="p-0.5 bg-gradient-to-r from-indigo-600 to-purple-600 rounded-lg shadow-sm transform hover:scale-105 transition-transform">
+                <div className="p-0.5 bg-white rounded-md">
+                  <div className="w-6.5 h-6.5 flex items-center justify-center text-base font-mono bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">
+                    {`</>`}
+                  </div>
+                </div>
+              </div>
+              <span className="bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">
+                Codes Share Ml
+              </span>
             </Link>
           </div>
 
