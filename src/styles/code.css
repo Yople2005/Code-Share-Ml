@@ -1,0 +1,111 @@
+/* Code editor styles */
+.code-editor {
+  font-family: 'Fira Code', 'Consolas', 'Monaco', 'Andale Mono', 'Ubuntu Mono', monospace;
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+/* Syntax highlighting theme customizations */
+.syntax-highlighter {
+  border-radius: 0.5rem !important;
+  margin: 0 !important;
+}
+
+.syntax-highlighter pre {
+  margin: 0 !important;
+  padding: 1rem !important;
+  background-color: #1E1E1E !important;
+}
+
+/* Language badge styles */
+.language-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.25rem 0.75rem;
+  border-radius: 9999px;
+  font-size: 0.75rem;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.language-badge.html {
+  background-color: #E34F26;
+  color: white;
+}
+
+.language-badge.css {
+  background-color: #1572B6;
+  color: white;
+}
+
+.language-badge.javascript {
+  background-color: #F7DF1E;
+  color: black;
+}
+
+.language-badge.cpp {
+  background-color: #00599C;
+  color: white;
+}
+
+.language-badge.java {
+  background-color: #007396;
+  color: white;
+}
+
+.language-badge.php {
+  background-color: #777BB4;
+  color: white;
+}
+
+/* Code snippet card styles */
+.code-snippet-card {
+  transition: all 0.2s ease-in-out;
+}
+
+.code-snippet-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+}
+
+/* Download button styles */
+.download-button {
+  transition: all 0.2s ease-in-out;
+}
+
+.download-button:hover {
+  transform: scale(1.05);
+}
+
+.download-button:active {
+  transform: scale(0.95);
+}
+
+/* Code input textarea styles */
+.code-input {
+  font-family: 'Fira Code', 'Consolas', 'Monaco', 'Andale Mono', 'Ubuntu Mono', monospace;
+  resize: vertical;
+  min-height: 200px;
+  tab-size: 2;
+}
+
+/* Error message styles */
+.error-message {
+  background-color: #FEE2E2;
+  border: 1px solid #FCA5A5;
+  color: #B91C1C;
+  padding: 1rem;
+  border-radius: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.error-message button {
+  color: #B91C1C;
+  text-decoration: underline;
+  margin-left: 0.5rem;
+}
+
+.error-message button:hover {
+  color: #991B1B;
+}
