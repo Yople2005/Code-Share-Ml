@@ -112,6 +112,24 @@ export function NoteView() {
     }
   }
 
+  const handleDownload = async (fileUrl: string, fileName: string) => {
+    try {
+      const response = await fetch(fileUrl);
+      const blob = await response.blob();
+      const url = window.URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = fileName;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      window.URL.revokeObjectURL(url);
+    } catch (error) {
+      console.error('Error downloading file:', error);
+      alert('Failed to download file. Please try again.');
+    }
+  };
+
   if (loading) {
     return <div className="flex justify-center items-center h-64">Loading...</div>;
   }
@@ -173,14 +191,13 @@ export function NoteView() {
                       </p>
                     </div>
                   </div>
-                  <a
-                    href={attachment.file_url}
-                    download
+                  <button
+                    onClick={() => handleDownload(attachment.file_url, attachment.file_name)}
                     className="flex items-center px-3 py-2 bg-white border border-gray-300 rounded-md text-sm font-medium text-gray-700 hover:bg-gray-50"
                   >
                     <Download className="h-4 w-4 mr-2" />
                     Download
-                  </a>
+                  </button>
                 </div>
               ))}
             </div>
