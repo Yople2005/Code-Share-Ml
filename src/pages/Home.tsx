@@ -27,6 +27,8 @@ interface CodeSnippet {
       name: string;
     } | null;
   };
+  is_important: boolean;
+  exam_notes: string | null;
 }
 
 interface Tag {
@@ -85,6 +87,8 @@ export default function Home() {
   const [isFullView, setIsFullView] = React.useState(false);
   const [isTransitioning, setIsTransitioning] = React.useState(false);
   const [timeLeft, setTimeLeft] = useState<TimeLeft>(calculateTimeLeft());
+  const [showExamNotes, setShowExamNotes] = useState(false);
+  const [examNotes, setExamNotes] = useState('');
 
   // Load initial data
   React.useEffect(() => {
@@ -361,7 +365,11 @@ export default function Home() {
                           <div
                             key={snippet.id}
                             onClick={() => handleSnippetClick(snippet)}
-                            className="bg-white rounded-lg border border-gray-200 p-6 hover:shadow-lg transition-shadow cursor-pointer group relative"
+                            className={`bg-white rounded-lg border ${
+                              snippet.is_important 
+                                ? 'border-amber-300 ring-2 ring-amber-200' 
+                                : 'border-gray-200'
+                            } p-6 hover:shadow-lg transition-shadow cursor-pointer group relative`}
                           >
                             <div className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-30 text-white opacity-0 group-hover:opacity-100 transition-opacity rounded-lg">
                               <p className="text-sm font-medium">Click to view full code</p>
@@ -369,14 +377,28 @@ export default function Home() {
                             
                             <div className="flex flex-col h-full">
                               <div className="mb-4">
-                                <h3 className="text-lg font-medium text-gray-900 truncate">
-                              {snippet.title}
-                            </h3>
-                            {snippet.description && (
+                                <div className="flex items-center justify-between">
+                                  <h3 className="text-lg font-medium text-gray-900 truncate">
+                                    {snippet.title}
+                                  </h3>
+                                  {snippet.is_important && (
+                                    <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-amber-100 text-amber-800">
+                                      Important for Exam ⭐
+                                    </span>
+                                  )}
+                                </div>
+                                {snippet.description && (
                                   <p className="mt-2 text-sm text-gray-500 line-clamp-2">
-                                {snippet.description}
-                              </p>
-                            )}
+                                    {snippet.description}
+                                  </p>
+                                )}
+                                {snippet.exam_notes && (
+                                  <div className="mt-2 p-2 bg-amber-50 rounded-md">
+                                    <p className="text-sm text-amber-800">
+                                      <span className="font-medium">Exam Note:</span> {snippet.exam_notes}
+                                    </p>
+                                  </div>
+                                )}
                               </div>
 
                               <div className="space-y-3 mb-4">
@@ -495,8 +517,84 @@ export default function Home() {
                           {selectedSnippet.code_content}
                           </SyntaxHighlighter>
                       </div>
-                      </div>
-                    )}
+
+                      {isAdmin && (
+                        <div className="flex items-center justify-between mb-4">
+                          <button
+                            onClick={async () => {
+                              const { error } = await supabase
+                                .from('code_snippets')
+                                .update({ is_important: !selectedSnippet.is_important })
+                                .eq('id', selectedSnippet.id);
+                              if (!error) {
+                                setSelectedSnippet({
+                                  ...selectedSnippet,
+                                  is_important: !selectedSnippet.is_important
+                                });
+                                loadSnippets();
+                              }
+                            }}
+                            className={`inline-flex items-center px-3 py-2 rounded-md text-sm font-medium ${
+                              selectedSnippet.is_important
+                                ? 'bg-amber-100 text-amber-800 hover:bg-amber-200'
+                                : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                            }`}
+                          >
+                            {selectedSnippet.is_important ? '⭐ Marked as Important' : 'Mark as Important'}
+                          </button>
+                          <button
+                            onClick={() => setShowExamNotes(true)}
+                            className="inline-flex items-center px-3 py-2 rounded-md text-sm font-medium bg-indigo-100 text-indigo-800 hover:bg-indigo-200"
+                          >
+                            {selectedSnippet.exam_notes ? 'Edit Exam Notes' : 'Add Exam Notes'}
+                          </button>
+                        </div>
+                      )}
+
+                      {/* Exam Notes Modal */}
+                      <Modal
+                        isOpen={showExamNotes}
+                        onClose={() => setShowExamNotes(false)}
+                        title="Exam Notes"
+                      >
+                        <div className="space-y-4">
+                          <textarea
+                            value={examNotes}
+                            onChange={(e) => setExamNotes(e.target.value)}
+                            placeholder="Add important notes for exam..."
+                            className="w-full h-32 p-2 border rounded-md"
+                          />
+                          <div className="flex justify-end space-x-2">
+                            <button
+                              onClick={() => setShowExamNotes(false)}
+                              className="px-4 py-2 text-sm font-medium text-gray-700 bg-gray-100 rounded-md hover:bg-gray-200"
+                            >
+                              Cancel
+                            </button>
+                            <button
+                              onClick={async () => {
+                                const { error } = await supabase
+                                  .from('code_snippets')
+                                  .update({ exam_notes: examNotes })
+                                  .eq('id', selectedSnippet.id);
+                                if (!error) {
+                                  setSelectedSnippet({
+                                    ...selectedSnippet,
+                                    exam_notes: examNotes
+                                  });
+                                  setShowExamNotes(false);
+                                  loadSnippets();
+                                }
+                              }}
+                              className="px-4 py-2 text-sm font-medium text-white bg-indigo-600 rounded-md hover:bg-indigo-700"
+                            >
+                              Save Notes
+                            </button>
+                          </div>
+                        </div>
+                      </Modal>
+                    </div>
+                  )}
                 </Modal>
               </div>
             </div>
