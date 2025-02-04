@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { supabase } from '../lib/supabase';
 import { LoadingSpinner } from '../components/LoadingSpinner';
@@ -48,6 +48,26 @@ interface SelectedSnippet extends CodeSnippet {
   isExpanded?: boolean;
 }
 
+interface TimeLeft {
+  days: number;
+  hours: number;
+  minutes: number;
+  seconds: number;
+}
+
+function calculateTimeLeft(): TimeLeft {
+  const examDate = new Date('March 24, 2025 00:00:00').getTime();
+  const now = new Date().getTime();
+  const difference = examDate - now;
+
+  return {
+    days: Math.floor(difference / (1000 * 60 * 60 * 24)),
+    hours: Math.floor((difference / (1000 * 60 * 60)) % 24),
+    minutes: Math.floor((difference / 1000 / 60) % 60),
+    seconds: Math.floor((difference / 1000) % 60)
+  };
+}
+
 export default function Home() {
   const { user, isAdmin, loading: authLoading } = useAuth();
   const navigate = useNavigate();
@@ -64,6 +84,7 @@ export default function Home() {
   const [selectedSnippet, setSelectedSnippet] = React.useState<SelectedSnippet | null>(null);
   const [isFullView, setIsFullView] = React.useState(false);
   const [isTransitioning, setIsTransitioning] = React.useState(false);
+  const [timeLeft, setTimeLeft] = useState<TimeLeft>(calculateTimeLeft());
 
   // Load initial data
   React.useEffect(() => {
@@ -81,10 +102,18 @@ export default function Home() {
     }
   }, [selectedFolder, selectedTag]);
 
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setTimeLeft(calculateTimeLeft());
+    }, 1000);
+
+    return () => clearInterval(timer);
+  }, []);
+
   async function loadInitialData() {
     try {
       setLoading(true);
-      await Promise.all([loadSnippets(), loadTags()]);
+    await Promise.all([loadSnippets(), loadTags()]);
     } catch (error) {
       console.error('Error loading initial data:', error);
       setError('Failed to load initial data');
@@ -159,10 +188,10 @@ export default function Home() {
           )
           ? snippetsWithTags
           : snippetsWithTags.filter(snippet =>
-              snippet.tags.some((tag: any) => 
-                tag.name.toLowerCase() === selectedTag.toLowerCase()
-              )
+            snippet.tags.some((tag: any) => 
+              tag.name.toLowerCase() === selectedTag.toLowerCase()
             )
+          )
         : snippetsWithTags;
 
       setSnippets(filteredSnippets);
@@ -211,6 +240,48 @@ export default function Home() {
         </div>
       </header>
 
+      <div className="bg-gradient-to-br from-pink-400 via-purple-500 to-indigo-600 text-white shadow-lg">
+        <div className="max-w-7xl mx-auto py-4 px-4 sm:px-6 lg:px-8">
+          <div className="text-center">
+            <h2 className="text-xl font-semibold mb-4 flex items-center justify-center gap-2">
+              <span className="animate-pulse">🎓</span>
+              <span>Time Until 1<sup>st</sup> Semester Exam</span>
+              <span className="animate-pulse">🎓</span>
+              
+            </h2>
+            <div className="grid grid-cols-4 gap-4 max-w-xl mx-auto">
+              <div className="bg-white/20 backdrop-blur-sm rounded-2xl p-4 transform hover:scale-105 transition-all duration-300 shadow-xl border border-white/30">
+                <div className="text-3xl font-bold bg-gradient-to-r from-pink-200 to-white bg-clip-text text-transparent">
+                  {timeLeft.days}
+                </div>
+                <div className="text-xs uppercase tracking-wider mt-1 font-medium">Days</div>
+              </div>
+              <div className="bg-white/20 backdrop-blur-sm rounded-2xl p-4 transform hover:scale-105 transition-all duration-300 shadow-xl border border-white/30">
+                <div className="text-3xl font-bold bg-gradient-to-r from-pink-200 to-white bg-clip-text text-transparent">
+                  {timeLeft.hours}
+                </div>
+                <div className="text-xs uppercase tracking-wider mt-1 font-medium">Hours</div>
+              </div>
+              <div className="bg-white/20 backdrop-blur-sm rounded-2xl p-4 transform hover:scale-105 transition-all duration-300 shadow-xl border border-white/30">
+                <div className="text-3xl font-bold bg-gradient-to-r from-pink-200 to-white bg-clip-text text-transparent">
+                  {timeLeft.minutes}
+                </div>
+                <div className="text-xs uppercase tracking-wider mt-1 font-medium">Minutes</div>
+              </div>
+              <div className="bg-white/20 backdrop-blur-sm rounded-2xl p-4 transform hover:scale-105 transition-all duration-300 shadow-xl border border-white/30">
+                <div className="text-3xl font-bold bg-gradient-to-r from-pink-200 to-white bg-clip-text text-transparent">
+                  {timeLeft.seconds}
+                </div>
+                <div className="text-xs uppercase tracking-wider mt-1 font-medium">Seconds</div>
+              </div>
+            </div>
+            <p className="mt-4 text-sm text-white/80 font-medium">
+              Stay focused and keep coding!✨
+            </p>
+          </div>
+        </div>
+      </div>
+
       <div className="container mx-auto px-4 py-8">
         {loading ? (
           <div className="flex justify-center items-center h-64">
@@ -239,9 +310,9 @@ export default function Home() {
                     <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6">
                       <div className="flex flex-col w-full sm:w-auto mb-4 sm:mb-0">
                         <h1 className="text-2xl font-semibold text-gray-900 flex items-center">
-                          Code Snippets
+                      Code Snippets
                         </h1>
-                        {selectedTag && (
+                      {selectedTag && (
                           <div className="mt-2">
                             <span className="text-sm text-gray-500">filtered by </span>
                             <span 
@@ -252,18 +323,18 @@ export default function Home() {
                               }}
                             >
                               {selectedTag}
-                            </span>
+                        </span>
                           </div>
-                        )}
-                      </div>
-                      {isAdmin && (
-                        <button
-                          onClick={() => setShowCreateForm(true)}
-                          className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-                        >
-                          Share Code
-                        </button>
                       )}
+                      </div>
+                    {isAdmin && (
+                      <button
+                        onClick={() => setShowCreateForm(true)}
+                        className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                      >
+                        Share Code
+                      </button>
+                    )}
                     </div>
                   </div>
 
@@ -286,7 +357,7 @@ export default function Home() {
                           isTransitioning ? 'opacity-0' : 'opacity-100'
                         }`}
                       >
-                        {snippets.map((snippet) => (
+                    {snippets.map((snippet) => (
                           <div
                             key={snippet.id}
                             onClick={() => handleSnippetClick(snippet)}
@@ -299,13 +370,13 @@ export default function Home() {
                             <div className="flex flex-col h-full">
                               <div className="mb-4">
                                 <h3 className="text-lg font-medium text-gray-900 truncate">
-                                  {snippet.title}
-                                </h3>
-                                {snippet.description && (
+                              {snippet.title}
+                            </h3>
+                            {snippet.description && (
                                   <p className="mt-2 text-sm text-gray-500 line-clamp-2">
-                                    {snippet.description}
-                                  </p>
-                                )}
+                                {snippet.description}
+                              </p>
+                            )}
                               </div>
 
                               <div className="space-y-3 mb-4">
@@ -322,11 +393,11 @@ export default function Home() {
                                   </span>
                                 </div>
                                 <div className="flex items-center space-x-2">
-                                  <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-indigo-100 text-indigo-800">
-                                    {SUPPORTED_LANGUAGES.find(l => l.value === snippet.language)?.label}
-                                  </span>
+                              <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-indigo-100 text-indigo-800">
+                                {SUPPORTED_LANGUAGES.find(l => l.value === snippet.language)?.label}
+                              </span>
                                 </div>
-                              </div>
+                            </div>
 
                               <div className="relative h-48 overflow-hidden rounded bg-gray-50">
                                 <SyntaxHighlighter
@@ -411,21 +482,21 @@ export default function Home() {
                         </div>
                       </div>
 
-                      <div className="mt-4 rounded-lg overflow-hidden">
-                        <SyntaxHighlighter
+                        <div className="mt-4 rounded-lg overflow-hidden">
+                          <SyntaxHighlighter
                           language={selectedSnippet.language}
-                          style={vscDarkPlus}
-                          customStyle={{
-                            margin: 0,
-                            borderRadius: '0.5rem',
-                            fontSize: '0.875rem'
-                          }}
-                        >
+                            style={vscDarkPlus}
+                            customStyle={{
+                              margin: 0,
+                              borderRadius: '0.5rem',
+                              fontSize: '0.875rem'
+                            }}
+                          >
                           {selectedSnippet.code_content}
-                        </SyntaxHighlighter>
+                          </SyntaxHighlighter>
                       </div>
-                    </div>
-                  )}
+                      </div>
+                    )}
                 </Modal>
               </div>
             </div>
